@@ -10,7 +10,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccountResponseDTO {
+public class AccountResponseDto {
     private Long id;
     private String actNo;
     private Long customerId;

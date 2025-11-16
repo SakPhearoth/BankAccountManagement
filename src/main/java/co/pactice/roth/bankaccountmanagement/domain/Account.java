@@ -33,7 +33,7 @@ public class Account {
     private String accountType;
 
     @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     @Column(name = "createAt", nullable = false)
     private Instant createdAt = Instant.now();

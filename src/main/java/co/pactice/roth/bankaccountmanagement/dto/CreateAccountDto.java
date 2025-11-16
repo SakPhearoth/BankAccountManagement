@@ -1,23 +1,23 @@
 package co.pactice.roth.bankaccountmanagement.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateAccountDTO {
+public class CreateAccountDto {
 
-    // actNo is not updatable here (we update by actNo param)
-    @NotNull (message = "customerId is required")
-    @Positive (message = "customerId must be positive")
+    @NotBlank(message = "accNo is required")
+    @Size(max =50, message = "accNo max length is 50")
+    private String accNo;
+
+    @NotNull(message = "customerId is required")
+    @Positive(message = "customerId must be positive")
     private Long customerId;
 
     @NotNull(message = "balance is required")
@@ -26,4 +26,6 @@ public class UpdateAccountDTO {
 
     @NotBlank(message = "accountType is required")
     private String accountType;
+
+
 }
