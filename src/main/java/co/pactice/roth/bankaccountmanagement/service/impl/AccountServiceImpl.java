@@ -8,11 +8,11 @@ import co.pactice.roth.bankaccountmanagement.exception.ResourceNotFoundException
 import co.pactice.roth.bankaccountmanagement.mapper.AccountMapper;
 import co.pactice.roth.bankaccountmanagement.repository.AccountRepository;
 import co.pactice.roth.bankaccountmanagement.service.AccountService;
-import jakarta.annotation.Resources;
-import jakarta.transaction.Transactional;
+
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.time.Instant;
 import java.util.List;
@@ -23,28 +23,32 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private final AccountRepository  accountRepository;
+    private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
 
     // Create account
     @Override
     @Transactional
     public AccountResponseDto create(CreateAccountDto createAccountDto) {
-        if (accountRepository.existsByAccountNo(createAccountDto.getAccNo())) {
-            throw new IllegalArgumentException("AccNo already exists");
-        }
+        // Map DTO -> entity (ActNo is null here)
         Account entity = accountMapper.toEntity(createAccountDto);
+
+        //generate UUID for account
+        entity.setAccountNo(UUID.randomUUID());
+
         entity.setCreatedAt(Instant.now());
         entity.setIsDeleted(false);
-        Account savedAccount = accountRepository.save(entity);
-        return accountMapper.toDto(savedAccount);
+
+        Account saved =  accountRepository.save(entity);
+        System.out.println("SAVED accountNo = " + saved.getAccountNo()); // <-- Debug
+        return accountMapper.toDto(saved);
     }
 
     // Find all accounts
     @Override
     @Transactional(readOnly = true)
-    public List<AccountResponseDto> findAll(){
-        return  accountRepository.findAll().stream()
+    public List<AccountResponseDto> findAll() {
+        return accountRepository.findAll().stream()
                 .map(accountMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -52,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
     // Find by account number
     @Override
     @Transactional(readOnly = true)
-    public AccountResponseDto findByAccNo(String accNo){
+    public AccountResponseDto findByAccNo(UUID accNo) {
         Account account = accountRepository.findByAccountNo(accNo)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with accNo: " + accNo));
         return accountMapper.toDto(account);
@@ -61,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
     // Find by customer Id
     @Override
     @Transactional(readOnly = true)
-    public List<AccountResponseDto> findByCustomerId(Long customerId){
+    public List<AccountResponseDto> findByCustomerId(Long customerId) {
         return accountRepository.findByCustomerId(customerId)
                 .stream()
                 .map(accountMapper::toDto)
@@ -72,7 +76,7 @@ public class AccountServiceImpl implements AccountService {
     // Delete by account number
     @Override
     @Transactional
-    public void deleteByAccNo (String accNo){
+    public void deleteByAccNo(UUID accNo) {
         Account account = accountRepository.findByAccountNo(accNo)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with accNo: " + accNo));
         accountRepository.delete(account);
@@ -81,7 +85,7 @@ public class AccountServiceImpl implements AccountService {
     // Update account by account number
     @Override
     @Transactional
-    public AccountResponseDto updateByAccNo(String accNo, UpdateAccountDto  updateAccountDto) {
+    public AccountResponseDto updateByAccNo(UUID accNo, UpdateAccountDto updateAccountDto) {
         Account account = accountRepository.findByAccountNo(accNo)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with accNo: " + accNo));
         accountMapper.updateFromDto(updateAccountDto, account);
@@ -93,12 +97,12 @@ public class AccountServiceImpl implements AccountService {
     // Disable by account number
     @Override
     @Transactional
-    public AccountResponseDto disableByAccNo(String accNo) {
+    public AccountResponseDto disableByAccNo(UUID accNo) {
         Account account = accountRepository.findByAccountNo(accNo)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with accNo: " + accNo));
         account.setIsDeleted(true);
         account.setUpdatedAt(Instant.now());
-        return  accountMapper.toDto(accountRepository.save(account));
+        return accountMapper.toDto(accountRepository.save(account));
     }
 
 }

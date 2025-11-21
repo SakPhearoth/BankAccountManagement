@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ import java.time.Instant;
 @Builder
 public class AccountResponseDto {
     private Long id;
-    private String actNo;
+    private UUID accountNo;
     private Long customerId;
     private BigDecimal balance;
     private String accountType;

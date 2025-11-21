@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table (name = "accounts", uniqueConstraints = @UniqueConstraint(columnNames = "acc_no"))
+@Table(name = "accounts", uniqueConstraints = @UniqueConstraint(columnNames = "act_no"))
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,25 +20,25 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "act_no", nullable = false, unique = true, length = 50)
-    private UUID accNo;
+    @Column(name = "act_no", nullable = false, unique = true)
+//    @GeneratedValue
+    private UUID accountNo;
 
-    @Column(name = "customerId",  nullable = false, unique = true, length = 50)
+    @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
     @Column(nullable = false)
     private BigDecimal balance;
 
-    @Column(length = 50)
+    @Column(name = "account_type", nullable = false, length = 50)
     private String accountType;
 
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
 
-    @Column(name = "createAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
     @Column(name = "updated_at")
     private Instant updatedAt;
-
 }

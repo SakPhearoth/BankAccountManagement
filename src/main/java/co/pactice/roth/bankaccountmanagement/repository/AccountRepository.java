@@ -8,11 +8,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    Optional<Account> findByAccountNo(String accountNo);
+    Optional<Account> findByAccountNo(UUID accountNo);
     List<Account> findByCustomerId(Long customerId);
-    boolean existsByAccountNo(String accountNo);
+    boolean existsByAccountNo(UUID accountNo);
 
-    String accNo(UUID accNo);
 
-    List<Account> accNo(UUID accNo);
 }

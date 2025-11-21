@@ -5,12 +5,14 @@ import co.pactice.roth.bankaccountmanagement.dto.AccountResponseDto;
 import co.pactice.roth.bankaccountmanagement.dto.CreateAccountDto;
 import co.pactice.roth.bankaccountmanagement.dto.UpdateAccountDto;
 import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+@Mapper(componentModel = "spring")
 public interface AccountMapper {
 
-    Account toEntity(CreateAccountDto dto);
+    Account toEntity(CreateAccountDto createAccountDto);
 
     AccountResponseDto toDto(Account account);
 

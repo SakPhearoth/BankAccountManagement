@@ -5,19 +5,20 @@ import co.pactice.roth.bankaccountmanagement.dto.CreateAccountDto;
 import co.pactice.roth.bankaccountmanagement.dto.UpdateAccountDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface AccountService {
     AccountResponseDto create(CreateAccountDto createAccountDto);
 
     List<AccountResponseDto> findAll();
 
-    AccountResponseDto findByAccNo(String accNo);
+    AccountResponseDto findByAccNo(UUID accNo);
 
     List<AccountResponseDto> findByCustomerId(Long customerId);
 
-    void deleteByAccNo(String accNo);
+    void deleteByAccNo(UUID accNo);
 
-    AccountResponseDto updateByAccNo(String accNo, UpdateAccountDto updateAccountDto);
+    AccountResponseDto updateByAccNo(UUID accNo, UpdateAccountDto updateAccountDto);
 
-    AccountResponseDto disableByAccNo(String accNo);
+    AccountResponseDto disableByAccNo(UUID accNo);
 }

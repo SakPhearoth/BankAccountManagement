@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,9 +13,9 @@ import java.math.BigDecimal;
 @Builder
 public class CreateAccountDto {
 
-    @NotBlank(message = "accNo is required")
-    @Size(max =50, message = "accNo max length is 50")
-    private String accNo;
+//    @NotBlank(message = "accNo is required")
+//    @Size(max =50, message = "accNo max length is 50")
+//    private UUID accNo;
 
     @NotNull(message = "customerId is required")
     @Positive(message = "customerId must be positive")
