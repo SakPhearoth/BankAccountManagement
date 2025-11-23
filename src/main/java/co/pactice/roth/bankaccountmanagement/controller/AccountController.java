@@ -1,9 +1,6 @@
 package co.pactice.roth.bankaccountmanagement.controller;
 
-import co.pactice.roth.bankaccountmanagement.dto.AccountResponseDto;
-import co.pactice.roth.bankaccountmanagement.dto.ApiResponse;
-import co.pactice.roth.bankaccountmanagement.dto.CreateAccountDto;
-import co.pactice.roth.bankaccountmanagement.dto.UpdateAccountDto;
+import co.pactice.roth.bankaccountmanagement.dto.*;
 import co.pactice.roth.bankaccountmanagement.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +27,28 @@ public class AccountController {
         return ResponseEntity.status(201).body(response);
     }
 
+//    @GetMapping
+//    public ResponseEntity<ApiResponse<List<AccountResponseDto>>> findAll() {
+//        List<AccountResponseDto> list = accountService.findAll();
+//        ApiResponse<List<AccountResponseDto>> response = ApiResponse.<List<AccountResponseDto>>builder()
+//                .status(200).message("Ok").data(list).build();
+//        return ResponseEntity.ok(response);
+//    }
+
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AccountResponseDto>>> findAll() {
-        List<AccountResponseDto> list = accountService.findAll();
-        ApiResponse<List<AccountResponseDto>> response = ApiResponse.<List<AccountResponseDto>>builder()
-                .status(200).message("Ok").data(list).build();
+    public ResponseEntity<ApiResponse<PagedResponse<AccountResponseDto>>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "ASC") String direction){
+
+        PagedResponse<AccountResponseDto> pagedResponse = accountService.findAllPaged(page, size, sortBy, direction);
+
+        ApiResponse<PagedResponse<AccountResponseDto>> response = ApiResponse.<PagedResponse<AccountResponseDto>>builder()
+                .status(200)
+                .message("Ok")
+                .data(pagedResponse)
+                .build();
         return ResponseEntity.ok(response);
     }
 
